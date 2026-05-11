@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate - PhishGuard Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .nav-bar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #f0f0f0;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .certificate-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .certificate-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certificate-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .certificate-header {
+            margin-bottom: 2rem;
+        }
+
+        .certificate-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .certificate-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .certificate-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .certificate-body {
+            margin: 2rem 0;
+        }
+
+        .awarded-to {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .recipient-name {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .certificate-details {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+        }
+
+        .detail-item {
+            margin: 0.5rem 0;
+            color: #555;
+        }
+
+        .certificate-id {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 1rem;
+        }
+
+        .seal {
+            font-size: 3rem;
+            margin: 1rem 0;
+        }
+
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .signature {
+            text-align: center;
+        }
+
+        .signature-line {
+            width: 200px;
+            height: 2px;
+            background: #333;
+            margin: 0.5rem 0;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: transform 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .progress-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .progress-bar-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+            height: 30px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .requirement-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .requirement-item {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .requirement-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .requirement-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .certificate-card {
+                padding: 1.5rem;
+            }
+            
+            .recipient-name {
+                font-size: 1.5rem;
+            }
+            
+            .signature-line {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="logo">🛡️ PhishGuard Pro</div>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/training" class="nav-link">Training</a>
+            <a href="/quiz" class="nav-link">Quiz</a>
+            <a href="/scenarios" class="nav-link">Scenarios</a>
+            <a href="/certificate" class="nav-link" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">Certificate</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="certificate-container">
+        <div id="certificateDisplay" style="display: none;">
+            <div class="certificate-card" id="certificateCard">
+                <div class="certificate-header">
+                    <div class="certificate-icon">🏆</div>
+                    <div class="certificate-title">Phishing Awareness Certificate</div>
+                    <div class="certificate-subtitle">of Completion</div>
+                </div>
+                
+                <div class="certificate-body">
+                    <div class="awarded-to">This certificate is proudly awarded to</div>
+                    <div class="recipient-name" id="recipientName"></div>
+                    
+                    <div class="certificate-details">
+                        <div class="detail-item">For successfully completing the Phishing Awareness Training Program</div>
+                        <div class="detail-item">Demonstrating proficiency in identifying and preventing phishing attacks</div>
+                        <div class="detail-item">Showing understanding of social engineering tactics</div>
+                        <div class="detail-item">Mastering security best practices and incident response</div>
+                    </div>
+                    
+                    <div class="seal">🛡️✨</div>
+                    
+                    <div class="signatures">
+                        <div class="signature">
+                            <div class="signature-line"></div>
+                            <div>Training Director</div>
+                        </div>
+                        <div class="signature">
+                            <div class="signature-line"></div>
+                            <div>Security Team Lead</div>
+                        </div>
+                    </div>
+                    
+                    <div class="certificate-id" id="certificateId"></div>
+                </div>
+            </div>
+            
+            <button class="download-btn" onclick="downloadCertificate()">📥 Download Certificate (PNG)</button>
+        </div>
+
+        <div class="progress-section" id="progressSection">
+            <h2>🎓 Your Certification Progress</h2>
+            <p>Complete all requirements to earn your official Phishing Awareness Certificate</p>
+            
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressFill">0% Complete</div>
+            </div>
+            
+            <ul class="requirement-list" id="requirementList"></ul>
+            
+            <button class="generate-btn" id="generateBtn" onclick="generateCertificate()">Generate Certificate →</button>
+        </div>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        let userProfile = null;
+        let certificateData = null;
+
+        async function loadProgress() {
+            try {
+                const response = await fetch('/api/user/profile');
+                if (response.ok) {
+                    userProfile = await response.json();
+                    updateProgressDisplay();
+                } else if (response.status === 401) {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        function updateProgressDisplay() {
+            if (!userProfile) return;
+            
+            // Calculate progress based on quiz completion
+            const quizCompleted = userProfile.quiz_completed;
+            const scenariosCompleted = userProfile.scenarios_completed;
+            const securityScore = userProfile.security_score;
+            
+            let progress = 0;
+            if (quizCompleted) progress += 60;
+            if (scenariosCompleted >= 5) progress += 20;
+            if (securityScore >= 70) progress += 20;
+            
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${progress}%`;
+            progressFill.innerHTML = `${Math.round(progress)}% Complete`;
+            
+            const requirementList = document.getElementById('requirementList');
+            requirementList.innerHTML = `
+                <li class="requirement-item ${quizCompleted ? 'requirement-completed' : 'requirement-pending'}">
+                    ${quizCompleted ? '✅' : '⏳'} Complete all quiz levels (Beginner, Intermediate, Advanced)
+                </li>
+                <li class="requirement-item ${scenariosCompleted >= 5 ? 'requirement-completed' : 'requirement-pending'}">
+                    ${scenariosCompleted >= 5 ? '✅' : '⏳'} Complete at least 5 real-world scenarios (${scenariosCompleted}/5 completed)
+                </li>
+                <li class="requirement-item ${securityScore >= 70 ? 'requirement-completed' : 'requirement-pending'}">
+                    ${securityScore >= 70 ? '✅' : '⏳'} Achieve security score of 70% or higher (${Math.round(securityScore)}% current)
+                </li>
+            `;
+            
+            const canGenerate = quizCompleted && scenariosCompleted >= 5 && securityScore >= 70;
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.disabled = !canGenerate;
+            
+            if (!canGenerate) {
+                generateBtn.title = 'Complete all requirements to generate certificate';
+            }
+        }
+
+        async function generateCertificate() {
+            try {
+                const response = await fetch('/api/certificate/generate', {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    certificateData = await response.json();
+                    displayCertificate();
+                    loadProgress(); // Refresh progress to update button state
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Failed to generate certificate');
+                }
+            } catch (error) {
+                console.error('Error generating certificate:', error);
+                alert('Error generating certificate');
+            }
+        }
+
+        function displayCertificate() {
+            if (!certificateData) return;
+            
+            document.getElementById('recipientName').innerHTML = certificateData.username;
+            document.getElementById('certificateId').innerHTML = `Certificate ID: ${certificateData.certificate_id}`;
+            
+            document.getElementById('progressSection').style.display = 'none';
+            document.getElementById('certificateDisplay').style.display = 'block';
+        }
+
+        async function downloadCertificate() {
+            const certificateCard = document.getElementById('certificateCard');
+            
+            // Show loading state
+            const downloadBtn = event.target;
+            const originalText = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = '⏳ Generating image...';
+            downloadBtn.disabled = true;
+            
+            try {
+                const canvas = await html2canvas(certificateCard, {
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    useCORS: true
+                });
+                
+                const link = document.createElement('a');
+                link.download = `Phishing_Awareness_Certificate_${certificateData.username}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+                
+                downloadBtn.innerHTML = '✅ Downloaded!';
+                setTimeout(() => {
+                    downloadBtn.innerHTML = originalText;
+                    downloadBtn.disabled = false;
+                }, 2000);
+            } catch (error) {
+                console.error('Error generating image:', error);
+                alert('Error generating certificate image. Please try again.');
+                downloadBtn.innerHTML = originalText;
+                downloadBtn.disabled = false;
+            }
+        }
+
+        async function logout() {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/';
+        }
+
+        // Load progress on page load
+        loadProgress();
+        
+        // Check if user already has certificate
+        async function checkExistingCertificate() {
+            try {
+                const response = await fetch('/api/certificate/generate', { method: 'POST' });
+                if (response.ok) {
+                    certificateData = await response.json();
+                    displayCertificate();
+                }
+            } catch (error) {
+                // No certificate yet, that's fine
+            }
+        }
+        
+        checkExistingCertificate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Center - PhishGuard Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #f0f0f0;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* Main Container */
+        .training-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .training-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .training-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .training-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            color: #666;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.53rem;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Content Sections */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Educational Content */
+        .content-block {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .content-block h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .content-block h3 {
+            color: #667eea;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .content-block p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+
+        .red-flag-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .red-flag-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .red-flag-list li:before {
+            content: "🚩";
+            position: absolute;
+            left: 0;
+        }
+
+        .best-practice-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 10px;
+            border-left: 3px solid #28a745;
+        }
+
+        .best-practice-title {
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Video Placeholder */
+        .video-placeholder {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 3rem;
+            text-align: center;
+            color: white;
+            margin: 1rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .training-container {
+                padding: 0 1rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+            }
+            
+            .nav-links {
+                gap: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="logo">🛡️ PhishGuard Pro</div>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/training" class="nav-link active">Training</a>
+            <a href="/quiz" class="nav-link">Quiz</a>
+            <a href="/scenarios" class="nav-link">Scenarios</a>
+            <a href="/certificate" class="nav-link">Certificate</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="training-container">
+        <div class="training-header">
+            <h1>📚 Phishing Awareness Training</h1>
+            <p>Comprehensive learning modules to master phishing detection</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('basics')">📖 Basics</button>
+            <button class="tab" onclick="showTab('social')">🧠 Social Engineering</button>
+            <button class="tab" onclick="showTab('technical')">💻 Technical Signs</button>
+            <button class="tab" onclick="showTab('bestpractices')">✅ Best Practices</button>
+        </div>
+
+        <!-- Basics Tab -->
+        <div id="basics" class="tab-content active">
+            <div class="content-block">
+                <h2>What is Phishing?</h2>
+                <p>Phishing is a cybercrime where attackers impersonate legitimate organizations to trick individuals into revealing sensitive information such as passwords, credit card numbers, and personal identification details.</p>
+                
+                <div class="warning-box">
+                    <strong>⚠️ Critical Statistics (2024):</strong><br>
+                    • 3.4 billion phishing emails are sent daily<br>
+                    • 1 in every 99 emails is a phishing attack<br>
+                    • 30% of phishing emails get opened by targeted users<br>
+                    • Average cost of a successful phishing attack: $1.6 million
+                </div>
+            </div>
+
+            <div class="content-block">
+                <h2>Common Types of Phishing Attacks</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title">📧 Email Phishing</div>
+                        <div class="card-description">Mass emails sent to many recipients with generic greetings like "Dear Customer". Often claims account problems or urgent issues.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🎯 Spear Phishing</div>
+                        <div class="card-description">Highly targeted attacks on specific individuals or companies using personal information to appear legitimate.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🐋 Whaling</div>
+                        <div class="card-description">Targets high-level executives (CEOs, CFOs) with sophisticated personalized attacks for major financial transfers.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📱 Smishing</div>
+                        <div class="card-description">Phishing via text messages, often claiming package delivery issues or bank alerts with shortened malicious links.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📞 Vishing</div>
+                        <div class="card-description">Phone call-based phishing where attackers pose as tech support, banks, or government agencies.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🔄 Clone Phishing</div>
+                        <div class="card-description">Creates nearly identical copy of legitimate email, replacing links or attachments with malicious versions.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-block">
+                <h2>Warning Signs of Phishing</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title">✉️ Email Red Flags</div>
+                        <ul class="red-flag-list">
+                            <li>Mismatched or suspicious sender email addresses</li>
+                            <li>Poor grammar and spelling errors</li>
+                            <li>Generic greetings (no personalization)</li>
+                            <li>Urgent or threatening language</li>
+                            <li>Requests for personal information</li>
+                            <li>Unexpected attachments</li>
+                            <li>Suspicious links (hover to check URL)</li>
+                            <li>Too good to be true offers</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🌐 Website Red Flags</div>
+                        <ul class="red-flag-list">
+                            <li>Misspelled domain names (Amaz0n.com vs Amazon.com)</li>
+                            <li>No "https://" in URL</li>
+                            <li>Browser security warnings</li>
+                            <li>Strange or unprofessional design</li>
+                            <li>Requests for unnecessary information</li>
+                            <li>Pop-ups asking for credentials</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Engineering Tab -->
+        <div id="social" class="tab-content">
+            <div class="content-block">
+                <h2>Understanding Social Engineering</h2>
+                <p>Social engineering is the psychological manipulation of people to perform actions or divulge confidential information. It's often more effective than technical hacking because it exploits human nature.</p>
+                
+                <div class="info-box">
+                    <strong>🧠 Key Insight:</strong> Social engineers exploit trust, fear, greed, and helpfulness. They don't hack systems - they hack people.
+                </div>
+            </div>
+
+            <div class="content-block">
+                <h2>Common Social Engineering Tactics</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title">🎭 Pretexting</div>
+                        <div class="card-description">Attacker creates a fabricated scenario (pretext) to steal information. Example: Fake survey, contest, or job offer.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🍯 Baiting</div>
+                        <div class="card-description">Promises something enticing to victims. Example: "Free movie download" containing malware or USB drives left in parking lots.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🚪 Tailgating</div>
+                        <div class="card-description">Following authorized person into secure area, often dressed as delivery person or maintenance worker.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🔄 Quid Pro Quo</div>
+                        <div class="card-description">Offers service or benefit in exchange for information. Example: "IT Support" offering help in exchange for password.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">😠 Anger Bait</div>
+                        <div class="card-description">Provokes emotional response to override logic. Fake complaints, violations, or urgent legal threats.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">⏰ Scarcity</div>
+                        <div class="card-description">Creates false sense of limited availability. "Only 2 spots left!" or "Exclusive offer expires today" triggering FOMO.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-block">
+                <h2>Real Social Engineering Examples</h2>
+                <div class="warning-box">
+                    <strong>🎭 Example 1: The Helpful Hacker</strong><br>
+                    "Hi, I'm from IT. We noticed unusual activity on your account. Can you verify your password so we can secure it?"<br>
+                    <em>Why it works: Creates urgency and offers help, making victims lower their guard.</em>
+                </div>
+                <div class="warning-box">
+                    <strong>👔 Example 2: The Authority Figure</strong><br>
+                    "This is Director Smith. I need you to wire $50,000 to this account immediately for an emergency acquisition."<br>
+                    <em>Why it works: Exploits respect for authority and fear of disobeying superiors.</em>
+                </div>
+                <div class="warning-box">
+                    <strong>💔 Example 3: The Romantic Scam</strong><br>
+                    Building online relationship over months before requesting money for "emergency" like medical bills or travel expenses.<br>
+                    <em>Why it works: Uses emotional connection and trust developed over time.</em>
+                </div>
+            </div>
+
+            <div class="content-block">
+                <h2>Protecting Against Social Engineering</h2>
+                <div class="success-box">
+                    <strong>🛡️ Defense Strategies:</strong><br>
+                    • Always verify identity through official channels<br>
+                    • Be skeptical of unsolicited requests<br>
+                    • Don't let urgency override caution<br>
+                    • Never share passwords or MFA codes<br>
+                    • Verify financial requests in person or by known phone number<br>
+                    • Question requests that bypass normal procedures<br>
+                    • Trust your instincts - if something feels wrong, it probably is
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Signs Tab -->
+        <div id="technical" class="tab-content">
+            <div class="content-block">
+                <h2>Technical Indicators of Phishing</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title">🔗 URL Analysis</div>
+                        <div class="card-description">
+                            <strong>What to check:</strong><br>
+                            • Hover over links to see actual URL<br>
+                            • Look for misspellings (rnicrosoft.com)<br>
+                            • Check for extra subdomains<br>
+                            • Verify HTTPS but don't trust it blindly<br>
+                            • Watch for URL shorteners (bit.ly, goo.gl)
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📧 Email Headers</div>
+                        <div class="card-description">
+                            <strong>What to examine:</strong><br>
+                            • Return-Path vs From address<br>
+                            • SPF/DKIM authentication results<br>
+                            • Received from servers (check origin)<br>
+                            • Reply-To address mismatch<br>
+                            • Date/time stamps for anomalies
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📎 Attachment Safety</div>
+                        <div class="card-description">
+                            <strong>Dangerous extensions:</strong><br>
+                            • .exe, .scr, .bat (executables)<br>
+                            • .docm, .xlsm (macro-enabled)<br>
+                            • .js, .vbs (scripts)<br>
+                            • .zip, .rar (compressed archives)<br>
+                            <em>Always scan attachments before opening!</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-block">
+                <h2>Interactive Email Inspector Exercise</h2>
+                <div class="video-placeholder">
+                    <h3>📧 Analyze This Suspicious Email</h3>
+                    <div style="background: white; color: #333; padding: 1rem; border-radius: 10px; text-align: left; margin-top: 1rem;">
+                        <strong>From:</strong> security@paypa1.com<br>
+                        <strong>To:</strong> your@email.com<br>
+                        <strong>Subject:</strong> ⚠️ URGENT: Account Suspension Notice ⚠️<br><br>
+                        Dear Valued Customer,<br><br>
+                        We have detected unusual activity on your PayPal account. To prevent permanent suspension, you must verify your account immediately.<br><br>
+                        Click here to verify: http://paypal-verify.secure-login.com/verify<br><br>
+                        Failure to verify within 24 hours will result in account termination.<br><br>
+                        PayPal Security Team
+                    </div>
+                    <button onclick="checkEmailAnalysis()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: white; color: #667eea; border: none; border-radius: 5px; cursor: pointer;">Check My Analysis</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Best Practices Tab -->
+        <div id="bestpractices" class="tab-content">
+            <div class="content-block">
+                <h2>Security Best Practices</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title">📧 Email Security</div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Check sender email addresses carefully</div>
+                            <div>Look for misspellings or slight variations in domain names</div>
+                        </div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Hover before you click</div>
+                            <div>Mouse over links to see the actual URL before clicking</div>
+                        </div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Verify unexpected attachments</div>
+                            <div>Contact sender through different channel before opening</div>
+                        </div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Enable email filtering</div>
+                            <div>Use spam filters and anti-phishing features</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🌐 Browser Security</div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Check for HTTPS</div>
+                            <div>Look for padlock icon before entering sensitive information</div>
+                        </div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Use password managers</div>
+                            <div>They won't auto-fill on fake websites</div>
+                        </div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Enable 2FA</div>
+                            <div>Two-factor authentication adds critical protection layer</div>
+                        </div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Keep software updated</div>
+                            <div>Browser and security updates include protection against known threats</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🔐 General Awareness</div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Be skeptical by default</div>
+                            <div>Question unsolicited requests for information</div>
+                        </div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Verify through official channels</div>
+                            <div>Use known phone numbers, not those provided in suspicious messages</div>
+                        </div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Trust your instincts</div>
+                            <div>If something feels wrong, it probably is</div>
+                        </div>
+                        <div class="best-practice-item">
+                            <div class="best-practice-title">✓ Regular security training</div>
+                            <div>Stay updated on latest phishing techniques</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-block">
+                <h2>Proactive Security Measures</h2>
+                <div class="info-box">
+                    <strong>📱 Mobile Security:</strong><br>
+                    Install updates promptly, review app permissions, avoid sideloading apps, use mobile security apps
+                </div>
+                <div class="info-box">
+                    <strong>💼 Workplace Security:</strong><br>
+                    Follow security policies, report incidents immediately, attend security training, use company VPN
+                </div>
+                <div class="info-box">
+                    <strong>🏠 Home Security:</strong><br>
+                    Secure home Wi-Fi, be cautious on public networks, use VPN for sensitive activities, update router firmware
+                </div>
+                <div class="info-box">
+                    <strong>🔑 Password Management:</strong><br>
+                    Use unique passwords for each account, change passwords after breaches, use passphrases instead of simple passwords
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        function checkEmailAnalysis() {
+            alert("Email Analysis:\n\nRed flags identified:\n" +
+                  "✓ Suspicious sender email (paypa1.com instead of paypal.com)\n" +
+                  "✓ Generic greeting 'Dear Valued Customer'\n" +
+                  "✓ Sense of urgency with 24-hour deadline\n" +
+                  "✓ Threatening language about account termination\n" +
+                  "✓ Suspicious URL not matching official domain\n\n" +
+                  "This is a CLASSIC phishing email. Never click links - always type official URLs directly!");
+        }
+        
+        async function logout() {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

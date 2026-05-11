@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PhishGuard Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #f0f0f0;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Welcome Card */
+        .welcome-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-card h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-card p {
+            opacity: 0.95;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.5s ease;
+            animation-fill-mode: both;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .progress-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .progress-bar-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+            height: 40px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .action-btn {
+            background: white;
+            border: none;
+            padding: 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-btn strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: #333;
+        }
+
+        .action-btn small {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .activity-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            font-size: 1.2rem;
+        }
+
+        .activity-text {
+            flex: 1;
+            color: #666;
+        }
+
+        .activity-time {
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        /* Badges Section */
+        .badges-section {
+            margin-top: 2rem;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .badge:hover {
+            transform: scale(1.05);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-name {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .badge-locked {
+            opacity: 0.5;
+            filter: grayscale(0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 0 1rem;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .welcome-card h1 {
+                font-size: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <span>🛡️</span>
+            PhishGuard Pro
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/training" class="nav-link">Training</a>
+            <a href="/quiz" class="nav-link">Quiz</a>
+            <a href="/scenarios" class="nav-link">Scenarios</a>
+            <a href="/certificate" class="nav-link">Certificate</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="welcome-card" id="welcomeCard">
+            <h1>Welcome back, <span id="username">...</span>! 👋</h1>
+            <p>Continue your journey to become a phishing detection expert. Your security awareness matters!</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value" id="securityScore">0%</div>
+                <div class="stat-label">Security Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value" id="totalPoints">0</div>
+                <div class="stat-label">Total Points Earned</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📚</div>
+                <div class="stat-value" id="scenariosCompleted">0</div>
+                <div class="stat-label">Scenarios Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-value" id="certStatus">No</div>
+                <div class="stat-label">Certificate Status</div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-title">🎓 Overall Training Progress</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressFill" style="width: 0%">0% Complete</div>
+            </div>
+            <div id="progressDetails" style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;"></div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-btn" onclick="location.href='/training'">
+                <span class="btn-icon">📚</span>
+                <strong>Start Training</strong>
+                <small>Learn the fundamentals</small>
+            </button>
+            <button class="action-btn" onclick="location.href='/quiz'">
+                <span class="btn-icon">🎯</span>
+                <strong>Take Quiz</strong>
+                <small>Test your knowledge</small>
+            </button>
+            <button class="action-btn" onclick="location.href='/scenarios'">
+                <span class="btn-icon">🔍</span>
+                <strong>View Scenarios</strong>
+                <small>Real-world examples</small>
+            </button>
+            <button class="action-btn" onclick="location.href='/certificate'">
+                <span class="btn-icon">🏆</span>
+                <strong>Get Certificate</strong>
+                <small>Claim your achievement</small>
+            </button>
+        </div>
+
+        <div class="recent-activity">
+            <div class="activity-title">📋 Recent Activity</div>
+            <div class="activity-list" id="activityList">
+                <div class="loading">Loading activity...</div>
+            </div>
+        </div>
+
+        <div class="badges-section">
+            <div class="activity-title">🏅 Achievements & Badges</div>
+            <div class="badges-grid" id="badgesGrid">
+                <div class="loading">Loading badges...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userData = null;
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch('/api/user/profile');
+                if (response.ok) {
+                    userData = await response.json();
+                    updateDashboard();
+                    loadActivity();
+                    loadBadges();
+                } else if (response.status === 401) {
+                    window.location.href = '/';
+                } else {
+                    throw new Error('Failed to load dashboard');
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                document.getElementById('welcomeCard').innerHTML = `
+                    <h1>Error Loading Dashboard</h1>
+                    <p>Please refresh the page or try again later.</p>
+                `;
+            }
+        }
+
+        function updateDashboard() {
+            // Update welcome message
+            document.getElementById('username').innerText = userData.username;
+            
+            // Update stats
+            document.getElementById('securityScore').innerText = Math.round(userData.security_score) + '%';
+            document.getElementById('totalPoints').innerText = userData.total_points;
+            document.getElementById('scenariosCompleted').innerText = userData.scenarios_completed;
+            document.getElementById('certStatus').innerHTML = userData.certificate_issued ? '✓ Earned' : 'Not Yet';
+            
+            if (userData.certificate_issued) {
+                document.getElementById('certStatus').style.color = '#28a745';
+            }
+            
+            // Update progress
+            const securityScore = userData.security_score;
+            const quizCompleted = userData.quiz_completed;
+            const scenariosCompleted = userData.scenarios_completed;
+            
+            let progress = 0;
+            if (quizCompleted) progress += 40;
+            if (scenariosCompleted >= 5) progress += 30;
+            if (securityScore >= 70) progress += 30;
+            
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${progress}%`;
+            progressFill.innerText = `${Math.round(progress)}% Complete`;
+            
+            const progressDetails = document.getElementById('progressDetails');
+            progressDetails.innerHTML = `
+                ${quizCompleted ? '✅' : '⏳'} All quizzes completed (40%)<br>
+                ${scenariosCompleted >= 5 ? '✅' : '⏳'} ${scenariosCompleted}/5 scenarios completed (30%)<br>
+                ${securityScore >= 70 ? '✅' : '⏳'} Security score ≥70% (30%)
+            `;
+        }
+
+        function loadActivity() {
+            const activities = [];
+            
+            if (userData.member_since) {
+                activities.push({
+                    icon: '🎉',
+                    text: 'Joined PhishGuard Pro',
+                    time: new Date(userData.member_since).toLocaleDateString()
+                });
+            }
+            
+            if (userData.quiz_completed) {
+                activities.push({
+                    icon: '✅',
+                    text: 'Completed all quizzes',
+                    time: 'Recently'
+                });
+            }
+            
+            if (userData.scenarios_completed > 0) {
+                activities.push({
+                    icon: '🔍',
+                    text: `Completed ${userData.scenarios_completed} real-world scenarios`,
+                    time: 'Recently'
+                });
+            }
+            
+            if (userData.certificate_issued) {
+                activities.push({
+                    icon: '🏆',
+                    text: 'Earned Phishing Awareness Certificate',
+                    time: 'Recently'
+                });
+            }
+            
+            if (activities.length === 0) {
+                activities.push({
+                    icon: '💡',
+                    text: 'Start your training to see activity here!',
+                    time: 'Get started'
+                });
+            }
+            
+            const activityList = document.getElementById('activityList');
+            activityList.innerHTML = activities.map(activity => `
+                <li class="activity-item">
+                    <span class="activity-icon">${activity.icon}</span>
+                    <span class="activity-text">${activity.text}</span>
+                    <span class="activity-time">${activity.time}</span>
+                </li>
+            `).join('');
+        }
+
+        function loadBadges() {
+            const badges = [
+                { name: 'Security Novice', icon: '🌱', requirement: 'Complete any quiz', achieved: userData.total_points > 0 },
+                { name: 'Phishing Spotter', icon: '🎯', requirement: 'Score 80%+ on any quiz', achieved: userData.security_score >= 80 },
+                { name: 'Scenario Master', icon: '🔍', requirement: 'Complete 3 scenarios', achieved: userData.scenarios_completed >= 3 },
+                { name: 'Security Expert', icon: '🛡️', requirement: 'Complete all training', achieved: userData.quiz_completed && userData.security_score >= 70 },
+                { name: 'Certificate Holder', icon: '🏆', requirement: 'Earn certificate', achieved: userData.certificate_issued },
+                { name: 'Top Performer', icon: '⭐', requirement: 'Score 90%+ overall', achieved: userData.security_score >= 90 }
+            ];
+            
+            const badgesGrid = document.getElementById('badgesGrid');
+            badgesGrid.innerHTML = badges.map(badge => `
+                <div class="badge ${!badge.achieved ? 'badge-locked' : ''}">
+                    <div class="badge-icon">${badge.icon}</div>
+                    <div class="badge-name">${badge.name}</div>
+                    <div style="font-size: 0.7rem; color: #999; margin-top: 0.25rem;">${badge.requirement}</div>
+                    ${badge.achieved ? '<div style="color: #28a745; font-size: 0.7rem;">✓ Unlocked</div>' : '<div style="color: #999; font-size: 0.7rem;">🔒 Locked</div>'}
+                </div>
+            `).join('');
+        }
+
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/';
+            } catch (error) {
+                console.error('Error logging out:', error);
+                window.location.href = '/';
+            }
+        }
+
+        // Load dashboard on page load
+        loadDashboard();
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadDashboard, 30000);
+    </script>
+</body>
+</html>
